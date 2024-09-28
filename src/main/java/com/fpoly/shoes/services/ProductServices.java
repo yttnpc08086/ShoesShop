@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductServices {
@@ -44,6 +45,7 @@ public class ProductServices {
             return null;
         }
     }
+
 
     public List<Product> findByCategoryId(Long categoryId) {
         return productRepository.findByCategoryId(categoryId);

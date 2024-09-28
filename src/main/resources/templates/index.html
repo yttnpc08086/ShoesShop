@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nike Clone</title>
+    <title>ShopShoes</title>
     <link rel="stylesheet" th:href="@{/css/style.css}" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <!-- <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,9 +54,21 @@
 
         <div class="top_navbar_right">
           <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/login">Login</a></li>
-            <li><a href="/register">Register</a></li>
+            <li><button type="button" class="btn btn-link nav-link" onclick="window.location.href='/'">Home</button></li>
+            <li sec:authorize="!isAuthenticated()">
+              <button type="button" class="btn btn-link nav-link" onclick="window.location.href='/login'">Login</button>
+            </li>
+            <li sec:authorize="!isAuthenticated()">
+              <button type="button" class="btn btn-link nav-link" onclick="window.location.href='/register'">Register</button>
+            </li>
+            <li sec:authorize="hasRole('ADMIN')">
+              <button type="button" class="btn btn-link nav-link" onclick="window.location.href='/admin'">Admin</button>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+              <form th:action="@{/logout}" method="post">
+                <button type="submit" class="btn btn-link nav-link">Logout</button>
+              </form>
+            </li>
             <li>welcome</li>
           </ul>
         </div>
@@ -87,9 +99,12 @@
             <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" role="img" width="24px" height="24px" fill="none"><path stroke="currentColor" stroke-width="1.5" d="M16.794 3.75c1.324 0 2.568.516 3.504 1.451a4.96 4.96 0 010 7.008L12 20.508l-8.299-8.299a4.96 4.96 0 010-7.007A4.923 4.923 0 017.205 3.75c1.324 0 2.568.516 3.504 1.451l.76.76.531.531.53-.531.76-.76a4.926 4.926 0 013.504-1.451"></path></svg>
            </div>
 
-           <div class="action_btn">
-            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" role="img" width="24px" height="24px" fill="none"><path stroke="currentColor" stroke-width="1.5" d="M8.25 8.25V6a2.25 2.25 0 012.25-2.25h3a2.25 2.25 0 110 4.5H3.75v8.25a3.75 3.75 0 003.75 3.75h9a3.75 3.75 0 003.75-3.75V8.25H17.5"></path></svg>
-           </div>
+          <a th:href="@{/cart}" class="no-visited-style"> <div class="action_btn">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" role="img" width="24px" height="24px" fill="none"><path stroke="currentColor" stroke-width="1.5"
+                                                                                                                                  d="M8.25 8.25V6a2.25 2.25 0 012.25-2.25h3a2.25 2.25 0 110 4.5H3.75v8.25a3.75 3.75 0 003.75 3.75h9a3.75 3.75
+ 0 003.75-3.75V8.25H17.5"></path></svg>
+          </div>
+          </a>
 
         </div>
       </div>
@@ -110,75 +125,41 @@
 
 
     <!-- new appereal -->
-     <section class="new_appreal">
-      <div class="product_card">
-        <div class="product_detail">
-          <p>Latest Running Shoes</p>
-          <h3>Niek Pegasus 41</h3>
-          <button class="btn">Shop Now</button>
-        </div>
-      </div>
-      <div class="product_card">
-        <div class="product_detail">
-          <p>Latest Running Shoes</p>
-          <h3>Niek Pegasus 41</h3>
-          <button class="btn">Shop Now</button>
-        </div>
-      </div>
-     </section>
 
-     <section class="new_appreal_2">
-      <div class="product_card_2">
-        <img src="/images/1.jpg" alt="">
+    <section class="new_appreal_2">
+      <div class="product_card_2" th:each="product : ${products}">
+        <img th:src="@{${product.image}}" alt="">
         <div class="product_detail_2">
-          <p>Latest Running Shoes</p>
-          <h3>Niek Pegasus 41</h3>
-          <button class="btn">Shop Now</button>
+          <p th:text="${product.category.name}"></p>
+          <h3 th:text="${product.name}"></h3>
+          <form th:action="@{/cart/add/{productId}(productId=${product.id})}" method="post">
+            <button type="submit" class="btn">Shop Now</button>
+          </form>
         </div>
       </div>
-      <div class="product_card_2">
-        <img src= "/images/2.jpg" alt="">
-        <div class="product_detail_2">
-          <p>Latest Running Shoes</p>
-          <h3>Niek Pegasus 41</h3>
-          <button class="btn">Shop Now</button>
-        </div>
-      </div>
-     </section>
+    </section>
 
-     <section class="new_appreal_3">
-      <div class="product_card_2">
-        <img src="/images/2.jpg" alt="">
+    <section class="new_appreal_3">
+      <div class="product_card_2" th:each="product : ${products}">
+        <img th:src="@{${product.image}}" alt="">
         <div class="product_detail_2">
-          <p>Latest Running Shoes</p>
-          <h3>Niek Pegasus 41</h3>
-          <button class="btn">Shop Now</button>
+          <p th:text="${product.category.name}"></p>
+          <h3 th:text="${product.name}"></h3>
+          <form th:action="@{/cart/add/{productId}(productId=${product.id})}" method="post">
+            <button type="submit" class="btn">Shop Now</button>
+          </form>
         </div>
       </div>
-      <div class="product_card_2">
-        <img src="/images/1.jpg" alt="">
-        <div class="product_detail_2">
-          <p>Latest Running Shoes</p>
-          <h3>Niek Pegasus 41</h3>
-          <button class="btn">Shop Now</button>
-        </div>
-      </div>
-      <div class="product_card_2">
-        <img src="/images/3.jpg" alt="">
-        <div class="product_detail_2">
-          <p>Latest Running Shoes</p>
-          <h3>Niek Pegasus 41</h3>
-          <button class="btn">Shop Now</button>
-        </div>
-      </div>
-      <div class="product_card_2">
-        <img src="/images/4.jpg" alt="">
-        <div class="product_detail_2">
-          <p>Latest Running Shoes</p>
-          <h3>Niek Pegasus 41</h3>
-          <button class="btn">Shop Now</button>
-        </div>
-      </div>
-     </section>
+    </section>
+
+    <script th:inline="javascript">
+      function addToCart(productId) {
+        fetch('/cart/add/' + productId, {
+          method: 'POST'
+        })
+      }
+
+    </script>
+
   </body>
 </html>

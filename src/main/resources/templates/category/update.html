@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <th:block th:replace="~{lib/inject}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/adminStyle.css}">
+    <title>Admin</title>
+
+</head>
+<body>
+<div class="top-container">
+    <div class="nav">
+        <div class="logo">
+            <i class='bx bxl-codepen'></i>
+            <a href="/">SHOESSHOP</a>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/customer">Customer</a>
+            <a href="/category">Category</a>
+            <a href="/product">Product</a>
+        </div>
+
+        <div class="right-section">
+            <i class='bx bx-bell'></i>
+            <i class='bx bx-search'></i>
+
+            <div class="profile" sec:authorize="isAuthenticated()">
+                <div class="info">
+                    <img src="assets/profile.png" alt="Profile Picture">
+                    <div>
+                        <a href="#">Alex Johnson</a>
+                        <p>Data Scientist</p>
+                    </div>
+                </div>
+                <i class='bx bx-chevron-down'></i>
+                <div class="dropdown-menu">
+                    <a href="#">Profile</a>
+                    <a href="#">Client</a>
+                    <a>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="logout">Logout</button>
+                        </form>
+                    </a>
+                </div>
+            </div>
+            <!-- Phần cho trạng thái chưa đăng nhập -->
+<div class="login-buttons" sec:authorize="!isAuthenticated()">
+    <a href="#" class="btn btn-primary" th:onclick="|window.location.href='@{/login}'|">Đăng Nhập</a>
+    <a href="#" class="btn btn-warning" th:onclick="|window.location.href='@{/register}'|">Đăng Ký</a>
+</div>
+</div>
+</div>
+
+<div class="status"></div>
+</div>
+<div class="container mt-5">
+    <h1>Update Category</h1>
+    <form action="#" th:action="@{/category/update}" th:object="${category}" method="post" class="needs-validation" novalidate onsubmit="return validateForm();">
+        <input type="hidden" id="id" name="id" th:value="${category.id}">
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" id="name" name="name" class="form-control" th:value="${category.name}" required>
+            <div class="invalid-feedback">Name must not contain special characters and cannot be empty.</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description:</label>
+            <input type="text" id="description" name="description" class="form-control" th:value="${category.description}" required>
+            <div class="invalid-feedback">Description must not contain special characters and cannot be empty.</div>
+        </div>
+
+        <div class="mb-3 form-check">
+            <input type="checkbox" id="status" name="status" class="form-check-input" th:checked="${category.status}">
+            <label for="status" class="form-check-label">Status:</label>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function validateForm() {
+        let valid = true;
+        const name = document.getElementById("name").value;
+        const description = document.getElementById("description").value;
+
+        const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/g;
+
+        // Kiểm tra tên
+        if (specialCharRegex.test(name) || name.trim() === "") {
+            valid = false;
+            document.querySelector("#name").classList.add("is-invalid");
+        } else {
+            document.querySelector("#name").classList.remove("is-invalid");
+        }
+
+        // Kiểm tra mô tả
+        if (specialCharRegex.test(description) || description.trim() === "") {
+            valid = false;
+            document.querySelector("#description").classList.add("is-invalid");
+        } else {
+            document.querySelector("#description").classList.remove("is-invalid");
+        }
+
+        // Hiển thị thông báo lỗi nếu có lỗi
+        if (!valid) {
+            document.querySelectorAll('.is-invalid').forEach(function(element) {
+                element.nextElementSibling.style.display = 'block';
+            });
+        } else {
+            document.querySelectorAll('.invalid-feedback').forEach(function(element) {
+                element.style.display = 'none';
+            });
+        }
+
+        return valid;
+    }
+</script>
+
+</body>
+</html>

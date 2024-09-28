@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <th:block th:replace="~{lib/inject}"></th:block>
+    <link rel="stylesheet" th:href="@{/css/adminStyle.css}">
+    <title>Admin</title>
+
+</head>
+
+<body>
+<div class="top-container">
+    <div class="nav">
+        <div class="logo">
+            <i class='bx bxl-codepen'></i>
+            <a href="/">SHOESSHOP</a>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">Dashboard</a>
+            <a href="/customer">Customer</a>
+            <a href="/category">Category</a>
+            <a href="/product">Product</a>
+        </div>
+
+        <div class="right-section">
+            <i class='bx bx-bell'></i>
+            <i class='bx bx-search'></i>
+
+            <div class="profile" sec:authorize="isAuthenticated()">
+                <div class="info">
+                    <img src="assets/profile.png" alt="Profile Picture">
+                    <div>
+                        <a href="#">Alex Johnson</a>
+                        <p>Data Scientist</p>
+                    </div>
+                </div>
+                <i class='bx bx-chevron-down'></i>
+                <div class="dropdown-menu">
+                    <a href="#">Profile</a>
+                    <a href="#">Client</a>
+                    <a>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="logout">Logout</button>
+                        </form>
+                    </a>
+                </div>
+            </div>
+            <!-- Phần cho trạng thái chưa đăng nhập -->
+            <div class="login-buttons" sec:authorize="!isAuthenticated()">
+                <a href="#" class="btn btn-primary" th:onclick="|window.location.href='@{/login}'|">Đăng Nhập</a>
+                <a href="#" class="btn btn-warning" th:onclick="|window.location.href='@{/register}'|">Đăng Ký</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="status"></div>
+</div>
+<div class=" mt-5">
+
+    <div class="container card shadow-sm">
+        <div class="card-header  text-dark">
+            <h1 class="h5 mb-0">Create Product</h1>
+        </div>
+        <div class="card-body">
+            <form action="#" th:action="@{/product/create}" th:object="${product}" method="post" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name:</label>
+                    <input type="text" id="name" name="name" th:value="${product.name}" class="form-control" required>
+                    <div class="invalid-feedback">Please enter a name.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description:</label>
+                    <input type="text" id="description" name="description" th:value="${product.description}" class="form-control" required>
+                    <div class="invalid-feedback">Please enter a description.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price:</label>
+                    <input type="text" id="price" name="price" th:value="${product.price}" class="form-control"
+                           required pattern="^(?!0)[0-9]+(\.[0-9]+)?$" title="Please enter a valid positive number.">
+                    <div class="invalid-feedback">Please enter a valid price (positive number).</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">Quantity:</label>
+                    <input type="text" id="quantity" name="quantity" th:value="${product.quantity}" class="form-control"
+                           required pattern="^(?!0)[0-9]+$" title="Please enter a valid positive integer.">
+                    <div class="invalid-feedback">Please enter a valid quantity (positive integer).</div>
+                </div>
+
+
+                <div class="mb-3 form-check">
+                    <input type="checkbox" id="status" name="status" th:checked="${product.status}" class="form-check-input">
+                    <label for="status" class="form-check-label">Status:</label>
+                </div>
+
+                <div class="mb-3">
+                    <label for="category" class="form-label">Category:</label>
+                    <select id="category" name="category.id" class="form-select" required>
+                        <option value="" disabled selected>Select a category</option>
+                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                    </select>
+                    <div class="invalid-feedback">Please select a category.</div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-outline-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<th:block th:replace="~{lib/script}"></th:block>
+<script>
+    // JavaScript to enable Bootstrap validation styles
+    (function () {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.prototype.slice.call(forms).forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+
+    // Regular expressions for validation
+    const namePattern = /^[a-zA-Z\s]+$/; // Chỉ cho phép chữ cái và khoảng trắng
+    const descriptionPattern = /^[\w\s.,-]+$/; // Cho phép chữ cái, số, khoảng trắng và một số ký tự đặc biệt thông dụng
+
+    document.querySelectorAll('.form-control, .form-select').forEach(input => {
+        input.addEventListener('input', function () {
+            // Validate for name field
+            if (this.id === 'name' && !namePattern.test(this.value)) {
+                this.setCustomValidity('Invalid field');
+                this.classList.add('is-invalid');
+                const feedback = this.nextElementSibling;
+                if (feedback) {
+                    feedback.style.display = 'block'; // Hiện thông báo lỗi
+                    feedback.innerText = 'Name can only contain letters and spaces.';
+                }
+            }
+            // Validate for description field
+            else if (this.id === 'description' && !descriptionPattern.test(this.value)) {
+                this.setCustomValidity('Invalid field');
+                this.classList.add('is-invalid');
+                const feedback = this.nextElementSibling;
+                if (feedback) {
+                    feedback.style.display = 'block'; // Hiện thông báo lỗi
+                    feedback.innerText = 'Description contains invalid characters.';
+                }
+            }
+            // Nếu trường hợp hợp lệ thì tắt thông báo lỗi
+            else {
+                this.setCustomValidity(''); // Bỏ lỗi tùy chỉnh
+                this.classList.remove('is-invalid');
+                const feedback = this.nextElementSibling; // lấy phần tử thông báo lỗi
+                if (feedback) {
+                    feedback.style.display = 'none'; // ẩn thông báo lỗi
+                }
+            }
+        });
+    });
+
+    // Xử lý sự kiện gửi form
+    document.querySelector('form').addEventListener('submit', function (event) {
+        let valid = true;
+
+        // Kiểm tra tất cả các trường có class 'form-control' và 'form-select'
+        this.querySelectorAll('.form-control, .form-select').forEach(input => {
+            // Kiểm tra từng trường với pattern riêng
+            if (!input.checkValidity()) {
+                valid = false;
+                input.classList.add('is-invalid');
+                const feedback = input.nextElementSibling;
+                if (feedback) {
+                    feedback.style.display = 'block'; // hiện thông báo lỗi
+                }
+            }
+        });
+
+        // Ngăn chặn gửi form nếu không hợp lệ
+        if (!valid) {
+            event.preventDefault();
+        }
+    });
+</script>
+
+
+
+</body>
+</html>

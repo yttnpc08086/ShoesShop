@@ -21,17 +21,17 @@ public class User {
     private String role;
 
     // New fields for the user registration form
-    @Column(nullable = false)
-    private String fullname;
+    @Column(nullable = true, columnDefinition = "nvarchar(255)")
+    private String fullname; // Nullable to allow for OAuth2 registration
 
     @Column(nullable = false, unique = true)
-    private String email;
+    private String email; // OAuth2 will provide this
 
-    @Column(nullable = false, unique = true)
-    private String phone;
+    @Column(nullable = true, unique = true)
+    private String phone; // Nullable to allow flexibility for OAuth2 registration
 
-    @Column(nullable = false)
-    private String address;
+    @Column(nullable = true, columnDefinition = "nvarchar(255)")
+    private String address; // Nullable to avoid issues during OAuth2 login
 
     // Constructors
     public User() {}
@@ -52,4 +52,5 @@ public class User {
         this.phone = phone;
         this.address = address;
     }
+
 }

@@ -5,11 +5,16 @@ import com.fpoly.shoes.model.Category;
 import com.fpoly.shoes.model.Product;
 import com.fpoly.shoes.services.CategoryServices;
 import com.fpoly.shoes.services.ProductServices;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -82,4 +87,6 @@ public class ProductController {
         productServices.deleteProduct(id);
         return "redirect:/product";
     }
+
+
 }
