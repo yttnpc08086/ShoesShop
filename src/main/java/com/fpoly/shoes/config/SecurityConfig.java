@@ -52,6 +52,9 @@ public class SecurityConfig {
                             response.sendRedirect("/login"); // Chuyển hướng đến trang đăng nhập nếu chưa xác thực
                         })
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
+
+
+
                             response.sendRedirect("/404"); // Chuyển hướng đến trang 403 nếu không đủ quyền
                         })
                 );

@@ -8,5 +8,114 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/2.1.7/js/dataTables.js"></script>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!--<script src="script.js"></script>-->
+<script>
+    const ctx = document.querySelector('.activity-chart');
+    const ctx2 = document.querySelector('.prog-chart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+            datasets: [{
+                label: 'Time',
+                data: [8, 6, 7, 6, 10, 8, 4],
+                backgroundColor: '#1e293b',
+                borderWidth: 3,
+                borderRadius: 6,
+                hoverBackgroundColor: '#60a5fa'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                x: {
+                    border: {
+                        display: true
+                    },
+                    grid: {
+                        display: true,
+                        color: '#1e293b'
+                    }
+                },
+                y: {
+                    ticks: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeInOutQuad',
+            }
+        }
+    });
+
+    new Chart(ctx2, {
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+            datasets: [{
+                label: 'Class GPA',
+                data: [6, 10, 8, 14, 6, 7, 4],
+                borderColor: '#0891b2',
+                tension: 0.4
+            },
+                {
+                    label: 'Aver GPA',
+                    data: [8, 6, 7, 6, 11, 8, 10],
+                    borderColor: '#ca8a04',
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                x: {
+                    grid: {
+                        display: false,
+                    }
+                },
+                y: {
+                    ticks: {
+                        display: false
+                    },
+                    border: {
+                        display: false,
+                        dash: [5, 5]
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            animation: {
+                duration: 1000,
+                easing: 'easeInOutQuad',
+            }
+        }
+    });
+</script>
+<script src="https://cdn.datatables.net/2.1.7/js/dataTables.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+
+</script>
 </body>
 </html>
