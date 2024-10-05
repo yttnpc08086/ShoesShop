@@ -1,0 +1,189 @@
+<html>
+    <head>
+        <title>Register</title>
+        <link nes="" rel="icon" sizes="192x192" href="https://www.nike.com/android-icon-192x192.png">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="CSS/form.css">
+      
+    </head>
+    <body>
+
+        <!--naviagtion start-->
+        <div class="menu-left">
+            <a href="Index.html" class="logo-1" style="float: left;">
+                <img src="images/Form/nike-logo.jpg">
+            </a>
+            <div class="dropdown">
+                <button class="dropbtn"><a href="MEN.HTML" style="text-decoration: none; color: white;">MEN</a></button>
+                <div class="dropdown-content">
+                    <a href="MEN/MENS.HTML" style="color:black;">SHOES</a>
+                    <a href="MEN/MENC.html" style="color:black;">CLOTHING</a>
+                    <a href="MEN/MENA.HTML" style="color:black;">ACCESSORIES</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">WOMEN</button>
+                <div class="dropdown-content">
+                    <a href="WomenShoe.html" style="color:black;">SHOES</a>
+                    <a href="WOMEN/WomenDress.html" style="color:black;">CLOTHING</a>
+                    <a href="WOMEN/WomenAcc.html" style="color:black;">ACCESSORIES</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">ACCESSORIES</button>
+                <div class="dropdown-content">
+                    <a href="MEN/MENA.HTML" style="color:black;">MEN</a>
+                    <a href="WOMEN/WomenAcc.htmlWomenAcc.html" style="color:black;">WOMEN</a>
+                </div>
+            </div>
+            <div class="search-box" style="align-items: right; text-align: right;">
+                <i class="fa fa-search" style="color: white;"></i>
+                <input type="search" placeholder="Search Here">
+            </div>
+        </div>
+        <!--navigation end-->
+        <a href="Index.html" class="logo">
+            <img src="images/Form/nike.jpg">
+        </a>
+        <div class="form">
+            <form action="End.html" style="width: 50%; align-self: center;">
+                <div class="container">
+                    <h1>Become a Nike Member</h1>
+                    <p style="text-align: center; color: gray;">Create your Nike Member profile and get <br> first access to the very best of Nike products, inspiration <br> and community.</p>
+                    <input type="text" placeholder="First Name" id="fname" name="fname" required>
+                    <br>
+                    <input type="text" placeholder="Last Name" id="lname" name="lname" required>
+                    <br>
+                    <input type="text" placeholder="Email Address" id="mail" name="email" required>
+                    <br>
+                    <input type="password" placeholder="Enter Password" id="pwd" name="psw" required>
+                    <br>
+                    <input type="password" placeholder="Confirm Password" id="rpwd" name="psw-confirm" required>
+                    <br>
+                    <input type="text" placeholder="Phone Number" id="num" name="phnumber" required>
+                    <br>
+                    <div class="clearfix">
+                        <input type="button" value="Male" class="selectbtn" style="height: 45px;">
+                        <input type="button" value="Female" class="selectbtn" style="height: 45px;">
+                    </div>
+                    <p style="color: gray;">By creating an account, you agree to Nike's <a href="#" style="color: gray;">Privacy Policy</a> <br> and <a href="#" style="color: gray;">Terms of Use</a></p>
+          
+                    <div class="clearfix">
+                        <a href="#"><button type="submit" id="btnSubmit" class="signupbtn">Join Us</button></a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <script>
+
+            
+            document.getElementById("btnSubmit").addEventListener("click", function(event)
+            {
+                // First Name
+                let fname = document.getElementById("fname").value;
+                if(!validateData(fname)) 
+                {
+                    alert("Only alphabets are allowed in first name");
+                    event.preventDefault();
+                    return;
+                }
+                
+                // Last Name
+                let lname = document.getElementById("lname").value;
+                if(!validateData(lname)) 
+                {
+                    alert("Only alphabets are allowed in last name");
+                    event.preventDefault();
+                    return;
+                } 
+                
+                // Password
+                let pwd = document.getElementById("pwd").value;
+                let rpwd = document.getElementById("rpwd").value;
+
+                if(!checkPassword(pwd,rpwd))
+                {
+                    event.preventDefault();
+                    return;
+                }
+
+                // Email
+                let mail = document.getElementById("mail").value;
+                if(!ValidateEmail(mail))
+                {
+                    event.preventDefault();
+                    return;
+                }
+
+                //Mobile Number
+                let num = document.getElementById("num").value;
+                if(!ValidateNumber(num))
+                {
+                    event.preventDefault();
+                    return;
+                }
+            }); 
+
+            // Function to validate name
+            function validateData(name) 
+            {
+                return isAlpha(name);
+                
+            }
+
+            function isAlpha(str) 
+            {
+                var patt = new RegExp("^[a-zA-Z]+$");
+                return patt.test(str);
+            }
+
+            // Function to check Whether both passwords match
+            function checkPassword(password1,password2) 
+            {
+  
+                // If password not entered 
+                if (password1 == '') 
+                    alert ("Please enter Password"); 
+                      
+                // If confirm password not entered 
+                else if (password2 == '') 
+                    alert ("Please enter confirm password"); 
+                      
+                // If Not same return False.     
+                else if (password1 != password2) { 
+                    alert ("\nPassword did not match: Please try again...") 
+                    return false; 
+                }
+                return true;
+            } 
+
+            // Function to Validate Email
+            function ValidateEmail(mail) 
+            {
+                if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+                {
+                    return true;
+                }
+                alert("You have entered an invalid email address!")
+                return false;
+            }
+
+            //Function to Validate Mobile Number
+            function ValidateNumber(num)
+            {
+                if (/^\d{10}$/.test(num))
+                    return true; 
+                else 
+                {
+                    alert("Invalid  phone number (should contain ten digits)");
+                    return false;
+                }
+            }
+
+        </script> 
+    </body>
+</html>

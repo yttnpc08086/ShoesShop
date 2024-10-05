@@ -1,0 +1,222 @@
+/* Form Stylesheet */
+
+.menu-left
+{
+    float: left;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-bottom: 120px;
+    background-color: black;
+    width: 100%;
+}
+
+.logo img
+{
+    height: 60px;
+    padding: 0px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.logo-1 img
+{
+    height: 61.05px;
+    box-sizing: border-box;
+}
+
+.menu-right
+{
+    float: right;
+}
+
+.search-box
+{
+    height: 18px;
+    padding: 10px;
+    border-bottom: 1px solid white;
+    margin: 10px 30px;
+    background-color: transparent;
+    width: 15%;
+    display: inline-block;
+    float: right;
+    
+}
+
+input[type=search]
+{
+    background-color: transparent;
+    width: 170px;
+    border: none;
+    outline: none;
+    text-align: center;
+    color: white;
+}
+
+/* Hoverable Dropdown */
+.dropbtn
+{
+    background-color: black;
+    color: white;
+    padding: 20px;
+    font-size: 18px;
+    border: none;
+}
+  
+.dropdown
+{
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 0px 20px;
+}
+  
+.dropdown-content
+{
+    display: none;
+    position: absolute;
+    font-size: 15px;
+    background-color: #f1f1f1;
+    min-width: 150px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+  
+.dropdown-content a
+{
+    color: black;
+    padding: 18px;
+    text-decoration: none;
+    display: block;
+}
+  
+.dropdown-content a:hover
+{
+    background-color: #ddd;
+    font-size: 18px;
+}
+  
+.dropdown:hover .dropdown-content
+{
+    display: block;
+}
+  
+.dropdown:hover .dropbtn
+{
+    background-color:black;
+}
+
+.text
+{
+    text-decoration: none;
+    color: white;
+}
+
+body
+{
+    margin: 0px;
+}
+
+/* Form */
+
+/* Full-width input fields */
+input[type=text], input[type=password]
+ {
+    width: 50%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: 0.5px solid lightgray;
+    background: white;
+  }
+  
+  input[type=text]:focus, input[type=password]:focus {
+    background-color: white;
+    outline: none;
+  }
+  
+  hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+  }
+  
+  /* Set a style for all buttons */
+  button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100px;
+    opacity: 0.9;
+  }
+  
+  button:hover {
+    opacity:1;
+  }
+
+  form
+  {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+  }
+  
+  /* Buttons */
+  .signupbtn
+  {
+    width: 300px;
+    background-color: black;
+    color: white;
+    font-size: 16px;
+  }
+  
+  .selectbtn
+  {
+    width: 187px;
+    margin-left: 2px;
+    background-color: white;
+    color: black;
+    font-size: 15px;
+    border: 0.4px solid lightgray;
+  }
+
+  /* Add padding to container elements */
+  .container {
+    padding: 16px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Clear floats */
+  .clearfix {
+    content: "";
+    clear: both;
+    display: table;
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Change styles for cancel button and signup button on extra small screens */
+  @media screen and (max-width: 300px) {
+    .cancelbtn, .signupbtn {
+       width: 100%;
+       align-self: center;
+    }
+  }
+
+  div.form
+  {
+      text-align: center;
+      display: inline-block;
+      width: 100%;
+  }
+
+  h1
+  {
+    font-family: TradeGothicforNike365-BdCn,Helvetica!important;
+    font-size: 25px;
+    letter-spacing: -1px;
+  }
