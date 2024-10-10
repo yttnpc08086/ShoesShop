@@ -125,6 +125,20 @@
 
 
     <!-- new appereal -->
+    <section class="new_appreal_1">
+      <div class="product_card_2" th:each="product : ${products}">
+        <img th:src="@{${product.image}}" alt="">
+        <div class="product_detail_2">
+          <p th:text="${product.category.name}"></p>
+          <h3 th:text="${product.name}"></h3>
+          <form class="add-to-cart-form" th:action="@{/cart/add}" method="post">
+            <input type="hidden" name="productId" th:value="${product.id}">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="btn btn-primary">Add to Cart</button>
+          </form>
+        </div>
+      </div>
+    </section>
 
     <section class="new_appreal_2">
       <div class="product_card_2" th:each="product : ${products}">
@@ -132,8 +146,10 @@
         <div class="product_detail_2">
           <p th:text="${product.category.name}"></p>
           <h3 th:text="${product.name}"></h3>
-          <form th:action="@{/cart/add/{productId}(productId=${product.id})}" method="post">
-            <button type="submit" class="btn">Shop Now</button>
+          <form class="add-to-cart-form" th:action="@{/cart/add}" method="post">
+            <input type="hidden" name="productId" th:value="${product.id}">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="btn btn-primary">Add to Cart</button>
           </form>
         </div>
       </div>
@@ -145,20 +161,51 @@
         <div class="product_detail_2">
           <p th:text="${product.category.name}"></p>
           <h3 th:text="${product.name}"></h3>
-          <form th:action="@{/cart/add/{productId}(productId=${product.id})}" method="post">
-            <button type="submit" class="btn">Shop Now</button>
+          <form class="add-to-cart-form" th:action="@{/cart/add}" method="post">
+            <input type="hidden" name="productId" th:value="${product.id}">
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="btn btn-primary">Add to Cart</button>
           </form>
         </div>
       </div>
     </section>
 
-    <script th:inline="javascript">
-      function addToCart(productId) {
-        fetch('/cart/add/' + productId, {
-          method: 'POST'
-        })
-      }
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $(".add-to-cart-form").submit(function(e) {
+          e.preventDefault();
+          var form = $(this);
+          $.ajax({
+            url: form.attr("action"),
+            type: form.attr("method"),
+            data: form.serialize(),
+            success: function(response) {
+              if (response.includes("<html")) {
+                window.location.href = "/login"; // Chuyển hướng đến trang đăng nhập nếu phản hồi là HTML
+              } else {
+                alert(response);
+                updateCart();
+              }
+            },
+            error: function(xhr) {
+              if (xhr.status === 302) {
+                window.location.href = "/login"; // Chuyển hướng đến trang đăng nhập
+              }
+            }
+          });
+        });
 
+        function updateCart() {
+          $.ajax({
+            url: "/cart/view",
+            type: "GET",
+            success: function(data) {
+              $("#cart-content").html(data);
+            }
+          });
+        }
+      });
     </script>
 
   </body>

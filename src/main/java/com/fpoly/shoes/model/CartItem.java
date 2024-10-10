@@ -16,14 +16,12 @@ public class CartItem {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
-    private
-    Product product;
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "product_id")
+    private Product product;
 
     private int quantity;
-
 }

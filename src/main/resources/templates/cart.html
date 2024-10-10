@@ -15,47 +15,49 @@
 </head>
 
 <body>
-    <div id="navB">
-        <div id="logo">
-            <a th:href="@{/}"><svg aria-hidden="true" class="swoosh-svg" focusable="false" viewBox="0 0 24 24" role="img" width="64px" height="64px" fill="none"><path fill="currentColor" fill-rule="evenodd" d="M21 8.719L7.836 14.303C6.74 14.768 5.818 15 5.075 15c-.836 0-1.445-.295-1.819-.884-.485-.76-.273-1.982.559-3.272.494-.754 1.122-1.446 1.734-2.108-.144.234-1.415 2.349-.025 3.345.275.2.666.298 1.147.298.386 0 .829-.063 1.316-.19L21 8.719z" clip-rule="evenodd"></path></svg></a>
-        </div>
-        <div id="Rside">
-            <span style="margin-right:0;"><i style="padding-right: 8px;" class="fas fa-shopping-bag"></i></span><span style="margin-left:0" id="basketCount">0</span>
-        </div>
+<div id="navB">
+    <div id="logo">
+        <a th:href="@{/}"><svg aria-hidden="true" class="swoosh-svg" focusable="false" viewBox="0 0 24 24" role="img" width="64px" height="64px" fill="none"><path fill="currentColor" fill-rule="evenodd" d="M21 8.719L7.836 14.303C6.74 14.768 5.818 15 5.075 15c-.836 0-1.445-.295-1.819-.884-.485-.76-.273-1.982.559-3.272.494-.754 1.122-1.446 1.734-2.108-.144.234-1.415 2.349-.025 3.345.275.2.666.298 1.147.298.386 0 .829-.063 1.316-.19L21 8.719z" clip-rule="evenodd"></path></svg></a>
     </div>
+    <div id="Rside">
+        <span style="margin-right:0;"><i style="padding-right: 8px;" class="fas fa-shopping-bag"></i></span><span style="margin-left:0" id="basketCount">0</span>
+    </div>
+</div>
 
-    <div id="cart_container">
-        <div id="mainB">
-            <button id = "basket">SHOPPING BASKET(0)</button>
-            <button id = "later">BUY LATER(0)</button>
-        </div>
-        <div id="card">
-            <div id="product" th:each="cartItem : ${cartItems}">
-                <img th:src="@{${cartItem.product.image}}" alt="">
-                <div>
-                    <h3 th:text="${cartItem.product.name}"></h3>
-                    <p th:text="${cartItem.product.price}"></p>
-                    <p>Số lượng: <span th:text="${cartItem.quantity}"></span></p>
-                </div>
+<div id="cart_container">
+    <div id="mainB">
+        <button id="basket">SHOPPING BASKET(<span th:text="${#lists.size(cartItems)}">0</span>)</button>
+        <button id="later">BUY LATER(0)</button>
+    </div>
+    <div id="card">
+        <div th:each="cartItem : ${cartItems}">
+            <img id="card_img" th:src="@{${cartItem.product.image}}" alt="">
+            <div>
+                <h3 th:text="${cartItem.product.name}"></h3>
+                <p th:text="${cartItem.product.price}"></p>
+                <p>Số lượng: <span th:text="${cartItem.quantity}"></span></p>
+                <input type="number" class="quantity" th:value="${cartItem.quantity}" />
+                <button class="update-cart-item" data-cart-item-id="${cartItem.id}">Update</button>
+                <button class="remove-cart-item" data-cart-item-id="${cartItem.id}">Remove</button>
             </div>
-        </div>
-        <div id="pay">
-            <div id="Item">0 &nbsp;<span>ITEM</span></div>
-            <hr>
-            <div id="lText1_div">
-              <div id="lText1">Total items: including tax</div>
-              <div id="total">0 &euro;</div>
-            </div>
-            <div #lText2_div>
-              <div id="lText2">TOTAL:</div>
-              <div id="total2">0 &euro; *</div>
-            </div>
-            <div id="cText">DO YOU HAVE A PROMOTIONAL CODE? Enter it when you reach the payment page</div>
-            <form th:action="@{/cart/checkout}" method="post">
-                <button id="btn" type="submit">PROCESS ORDER</button>
-            </form>
         </div>
     </div>
+    <div id="pay">
+        <div id="Item"><span th:text="${#lists.size(cartItems)}">0</span> &nbsp;<span>ITEM</span></div>
+        <hr>
+        <div id="lText1_div">
+            <div id="lText1">Total items: including tax</div>
+            <div id="total">0 &euro;</div>
+        </div>
+        <div id="lText2_div">
+            <div id="lText2">TOTAL:</div>
+            <div id="total2">0 &euro; *</div>
+        </div>
+        <form th:action="@{/order/checkout}" method="post">
+            <button id="btn" type="submit">PROCESS ORDER</button>
+        </form>
+    </div>
+</div>
 
     <div id="footer">
         <div id="foo_container">
@@ -112,6 +114,70 @@
             </div>
         </div>
     </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        function calculateTotal() {
+            let total = 0;
+            $(".quantity").each(function() {
+                const quantity = $(this).val();
+                const price = $(this).closest("div").find("p:nth-child(2)").text();
+                total += quantity * parseFloat(price);
+            });
+            $("#total").text(total.toFixed(2) + " €");
+            $("#total2").text(total.toFixed(2) + " € *");
+        }
+
+        calculateTotal();
+
+        $(".update-cart-item").click(function(e) {
+            e.preventDefault();
+            var cartItemId = $(this).data("cart-item-id");
+            var quantity = $(this).siblings(".quantity").val();
+
+            $.ajax({
+                url: "/cart/update",
+                type: "POST",
+                data: {
+                    cartItemId: cartItemId,
+                    quantity: quantity
+                },
+                success: function(response) {
+                    alert(response);
+                    calculateTotal();
+                },
+                error: function(xhr) {
+                    alert(xhr.responseText);
+                }
+            });
+        });
+
+        $(".remove-cart-item").click(function(e) {
+            e.preventDefault();
+            var cartItemId = $(this).data("cart-item-id");
+
+            $.ajax({
+                url: "/cart/remove",
+                type: "POST",
+                data: {
+                    cartItemId: cartItemId
+                },
+                success: function(response) {
+                    alert(response);
+                    location.reload();
+                },
+                error: function(xhr) {
+                    alert(xhr.responseText);
+                }
+            });
+        });
+
+        $(".quantity").change(function() {
+            calculateTotal();
+        });
+    });
+</script>
 </body>
 
 </html>

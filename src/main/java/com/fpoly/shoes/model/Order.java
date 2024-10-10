@@ -15,21 +15,15 @@ import java.util.List;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    // Lưu trữ cả ngày và giờ
-    private java.util.Date orderDate;
-
-    private double totalPrice;
-
-    private String status; // Ví dụ: "PENDING", "PROCESSING", "COMPLETED", "CANCELLED"
-
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL) // Liên kết một chiều với OrderItem
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;
+
+    @Column(nullable = false, columnDefinition = "float default 0.0")
+    private double totalAmount;
 }

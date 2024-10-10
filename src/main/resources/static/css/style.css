@@ -143,6 +143,7 @@
 .new_appreal_1,
 .new_appreal_2,
 .new_appreal_3 {
+  background-color: #f3f4f6;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;

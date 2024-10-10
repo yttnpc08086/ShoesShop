@@ -1,16 +1,10 @@
 package com.fpoly.shoes.services;
 
-import com.fpoly.shoes.model.CartItem;
-import com.fpoly.shoes.model.Order;
-import com.fpoly.shoes.model.OrderItem;
-import com.fpoly.shoes.model.User;
+import com.fpoly.shoes.model.*;
 import com.fpoly.shoes.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -23,48 +17,37 @@ public class OrderService {
     private OrderItemRepository orderItemRepository;
 
     @Autowired
-    private CartItemRepository cartItemRepository;
+    private CartService cartService;
 
     @Autowired
     private UserRepository userRepository;
 
-    @Transactional
-    public void createOrderFromCart(String username) {
+    public Order createOrder(String username) {
         User user = userRepository.findByUsername(username);
         if (user == null) {
-            return; // Hoặc xử lý trường hợp không tìm thấy người dùng
+            throw new IllegalArgumentException("User not found");
         }
 
-        List<CartItem> cartItems = cartItemRepository.findByUser(user); // Sửa đổi tại đây
-
-        if (cartItems.isEmpty()) {
-            return; // Hoặc xử lý trường hợp giỏ hàng trống
+        Cart cart = cartService.getCartByUsername(username);
+        if (cart == null || cart.getCartItems().isEmpty()) {
+            throw new IllegalArgumentException("Cart is empty");
         }
 
         Order order = new Order();
         order.setUser(user);
-        order.setOrderDate(new Date());
-        order.setStatus("PENDING"); // Trạng thái đơn hàng ban đầu
+        order.setTotalAmount(cart.getCartItems().stream().mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity()).sum());
+        orderRepository.save(order);
 
-        double totalPrice = 0;
-        List<OrderItem> orderItems = new ArrayList<>();
-
-        // Tạo OrderItem cho từng CartItem
-        for (CartItem cartItem : cartItems) {
+        for (CartItem cartItem : cart.getCartItems()) {
             OrderItem orderItem = new OrderItem();
             orderItem.setOrder(order);
             orderItem.setProduct(cartItem.getProduct());
             orderItem.setQuantity(cartItem.getQuantity());
             orderItem.setPrice(cartItem.getProduct().getPrice());
-            orderItems.add(orderItem);
-            totalPrice += orderItem.getPrice() * orderItem.getQuantity();
+            orderItemRepository.save(orderItem);
         }
 
-        order.setTotalPrice(totalPrice);
-        order.setOrderItems(orderItems);
-
-        orderRepository.save(order); // Lưu đơn hàng
-        orderItemRepository.saveAll(orderItems); // Lưu tất cả các OrderItem
-        cartItemRepository.deleteAllByUser(user); // Sửa đổi tại đây
+        cartService.clearCart(username);
+        return order;
     }
 }

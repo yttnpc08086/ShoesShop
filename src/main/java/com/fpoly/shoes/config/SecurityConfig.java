@@ -18,7 +18,8 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize // Cấu hình quyền truy cập cho các request
                         .requestMatchers("/images/**", "/register", "/login", "/css/**", "/js/**", "/",
-                                "/category/view/{id}", "/product/view/{id}", "/cart").permitAll() // Cho phép tất cả truy cập
+                                "/category/view/{id}", "/product/view/{id}").permitAll() // Cho phép tất cả truy cập
+                        .requestMatchers("/cart/**").hasRole("USER") // Yêu cầu role USER cho các request đến /cart/**
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Yêu cầu role ADMIN cho các request đến /admin/**
                         .anyRequest().authenticated() // Yêu cầu xác thực cho các request còn lại
                 )
@@ -62,7 +63,6 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // Cấu hình PasswordEncoder sử dụng BCrypt
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
